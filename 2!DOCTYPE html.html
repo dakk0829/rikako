@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カウントダウンページ</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            background: url('https://chat.openai.com/attachments/8d15a0ed-f580-4c9d-b4ee-645dbb74a9ba/0/0/5a562ef5-6b8f-4b66-8ae0-bc7f3b48b7b3/0') no-repeat center center fixed; /* 背景画像を指定 */
+            background-size: cover;
+        }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.5); /* 半透明のオーバーレイ */
+        }
+        #countdown {
+            font-size: 3em;
+            text-align: center;
+        }
+        #video-container {
+            display: none;
+            width: 80vw;
+            height: 45vw; /* 16:9 のアスペクト比 */
+            max-width: 560px;
+            max-height: 315px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay">
+        <div id="countdown"></div>
+    </div>
+    <div id="video-container">
+        <iframe src="https://drive.google.com/file/d/1PuqOMD2_XgymG6_QBldPMWny0xCmJrTz/preview" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        const videoContainer = document.getElementById('video-container');
+        const overlay = document.getElementById('overlay');
+        
+        // カウントダウンの終了日時を設定 (年, 月 - 1, 日, 時, 分, 秒)
+        const countdownDate = new Date(2024, 4, 29, 0, 0, 0).getTime();
+
+        // 毎秒カウントダウンを更新する
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                overlay.style.display = 'none';
+                videoContainer.style.display = 'block';
+            } else {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = `${days}日 ${hours}時間 ${minutes}分 ${seconds}秒`;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
